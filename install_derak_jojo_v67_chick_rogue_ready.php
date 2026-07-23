@@ -14,13 +14,7 @@ function ready_fetch(string $url): string
 {
     if(function_exists('curl_init')){
         $ch=curl_init($url);
-        curl_setopt_array($ch,[
-            CURLOPT_RETURNTRANSFER=>true,
-            CURLOPT_FOLLOWLOCATION=>true,
-            CURLOPT_CONNECTTIMEOUT=>15,
-            CURLOPT_TIMEOUT=>40,
-            CURLOPT_USERAGENT=>'Derak-JoJo-V67-Installer/1.0'
-        ]);
+        curl_setopt_array($ch,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_FOLLOWLOCATION=>true,CURLOPT_CONNECTTIMEOUT=>15,CURLOPT_TIMEOUT=>40,CURLOPT_USERAGENT=>'Derak-JoJo-V67-Installer/1.0']);
         $body=curl_exec($ch);
         $code=(int)curl_getinfo($ch,CURLINFO_HTTP_CODE);
         curl_close($ch);
@@ -36,18 +30,11 @@ function ready_fetch(string $url): string
 
 $url='https://raw.githubusercontent.com/bahmanbahraminia1366-maker/MTB-Mining-Super-App/964ce932ae96a672344a5672bbd52f2fb8ff9bf0/downloads/install_derak_jojo_v67_chick_rogue.php';
 $code=ready_fetch($url);
-if($code==='' || strpos($code,'JOJO_V67_CHICK_ROGUE')===false || strpos($code,'<?php')!==0){
-    ready_fail('هاست نتوانست فایل اصلی آپدیت را از GitHub دریافت کند. دسترسی خروجی cURL یا allow_url_fopen را بررسی کن.');
-}
-
-/* دو رشتهٔ معرفی پنل در نسخه منبع باید با خط جدید واقعی وارد pet.php شوند. */
+if($code==='' || strpos($code,'JOJO_V67_CHICK_ROGUE')===false || strpos($code,'<?php')!==0){ready_fail('هاست نتوانست فایل اصلی آپدیت را از GitHub دریافت کند. دسترسی خروجی cURL یا allow_url_fopen را بررسی کن.');}
 $bad="\\\\n\".\\n        \"";
 $good="\\\\n\".\n        \"";
 $code=str_replace($bad,$good,$code,$fixed);
-if($fixed<2){
-    ready_fail('ساختار فایل منبع تغییر کرده و اصلاح ایمن آن ممکن نیست.');
-}
-
+if($fixed<2){ready_fail('ساختار فایل منبع تغییر کرده و اصلاح ایمن آن ممکن نیست.');}
 $tmp=__DIR__.'/.jojo_v67_ready_'.getmypid().'.php';
 if(@file_put_contents($tmp,$code,LOCK_EX)===false) ready_fail('ساخت فایل موقت داخل پوشه amir ممکن نشد. سطح دسترسی پوشه را بررسی کن.');
 @chmod($tmp,0644);
